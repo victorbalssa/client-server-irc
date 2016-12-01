@@ -25,6 +25,9 @@ void			server_read(t_env *e, int s)
     return ;
   my_putstr("New client connected\n");
   add_elem_fd(&e->list, cs, FD_CLIENT, client_read);
+  my_putstr_fd(cs, "Welcome to the world's coolest irc server.\n");
+  my_putstr_fd(cs, "List channels with /list (/l) and /join it\n");
+  my_putstr_fd(cs, "to start discussing !!\n");
 }
 
 void			add_server(t_env *e)
@@ -57,7 +60,7 @@ void			add_server(t_env *e)
 
 int			my_server(t_env *e)
 {
-  t_server		*tmp;
+  t_client		*tmp;
 
   FD_ZERO(&e->fd_read);
   FD_ZERO(&e->fd_write);
@@ -74,7 +77,7 @@ int			my_server(t_env *e)
       tmp = tmp->next;
     }
   if (select(e->fd_max + 1, &e->fd_read, &e->fd_write, NULL, NULL) == -1)
-    return (-1);
+    return (0);
   tmp = e->list;
   while (tmp != NULL)
     {
@@ -82,7 +85,7 @@ int			my_server(t_env *e)
 	tmp->fptr_read(e, tmp->fd);
       tmp = tmp->next;
     }
-  return (0);
+  return (1);
 }
 
 int			main(int argc, char **argv)
@@ -91,14 +94,13 @@ int			main(int argc, char **argv)
 
   if (argc != 2 || my_getnbr(argv[1]) < 1025)
     {
-      my_putstr("\nUsage : ./server_bin port\n\n");
+      my_putstr("Usage : ./server_bin port\n\n");
       return (0);
     }
   e.port = my_getnbr(argv[1]);
   e.list = NULL;
   e.chan = NULL;
   add_server(&e);
-  while (1)
-    my_server(&e);
+  while (my_server(&e));
   return (0);
 }

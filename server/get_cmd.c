@@ -16,12 +16,19 @@
 t_cmd		g_tab[] =
   {
     {"/nick", &my_nick},
+    {"/n", &my_nick},
     {"/list", &my_list},
+    {"/l", &my_list},
     {"/join", &my_join},
-    {"/part", &my_quit},
+    {"/j", &my_join},
+    {"/quit", &my_quit},
+    {"/q", &my_quit},
     {"/exit", &my_exit},
+    {"/e", &my_exit},
     {"/users", &my_users},
+    {"/u", &my_users},
     {"/whisp", &my_whisp},
+    {"/w", &my_whisp},
     {NULL, NULL}
   };
 
@@ -33,7 +40,6 @@ int		get_cmd(t_env *e, char *buff, int fd)
   i = -1;
   if (buff[0] != '\0')
     {
-      my_putstr("test 1 \n");
       cmd = my_str_to_wordtab(buff, ' ');
       if (cmd[0] == NULL)
 	return (0);
@@ -53,21 +59,14 @@ int		my_exit(t_env *e, char **cmd, int fd)
   t_chan        *tmp;
 
   tmp = e->chan;
-  if (tablen(cmd) != 2)
+  if (tablen(cmd) == 1)
     {
-      my_putstr_fd(fd, "part : error arguments.\n");
-      return (0);
+      while (tmp)
+	{
+	  disconnect_chan(tmp->user, tmp, fd);
+	  tmp = tmp->next;
+	}
     }
-  while (tmp)
-    {
-      if (!my_strcmp(tmp->name, cmd[1]))
-        {
-          disconnect_part(tmp->user, fd);
-          return (0);
-        }
-      tmp = tmp->next;
-    }
-  my_putstr_fd(fd, "part : error chan doesn't exist.\n");
   return (0);
 }
 
@@ -88,13 +87,13 @@ int		my_list(t_env *e, char **cmd, int fd)
 	}
     }
   else
-    my_putstr_fd(fd, "list : error arguments.\n");
+    my_putstr_fd(fd, "/list : error, too much arguments.\n");
   return (0);
 }
 
-int		disconnect_part(t_server *list, int fd)
+int		disconnect_chan(t_client *list, t_chan *c, int fd)
 {
-  t_server	*user;
+  t_client	*user;
 
   user = list;
   while (user)
@@ -103,11 +102,13 @@ int		disconnect_part(t_server *list, int fd)
 	{
 	  user->type = FD_FREE;
 	  user->nickname = NULL;
+	  my_putstr_fd(fd, "You leave the chan ");
+	  my_putstr_fd(fd, c->name);
+	  my_putstr_fd(fd, " \n");
 	  return (0);
 	}
       user = user->next;
     }
-  my_putstr_fd(fd, "part : error client doesn't exist in this chan.\n");
   return (0);
 }
 
@@ -116,32 +117,27 @@ int		my_quit(t_env *e, char **cmd, int fd)
   t_chan	*tmp;
 
   tmp = e->chan;
-  if (tablen(cmd) != 2)
+  if (tablen(cmd) != 1)
     {
-      my_putstr_fd(fd, "part : error arguments.\n");
+      my_putstr_fd(fd, "/quit : error too much arguments.\n");
       return (0);
     }
   while (tmp)
     {
-      if (!my_strcmp(tmp->name, cmd[1]))
-	{
-	  disconnect_part(tmp->user, fd);
-	  return (0);
-	}
+      disconnect_chan(tmp->user, tmp, fd);
       tmp = tmp->next;
     }
-  my_putstr_fd(fd, "part : error chan doesn't exist.\n");
   return (0);
 }
 
 int		my_nick(t_env *e, char **cmd, int fd)
 {
   t_chan	*current_chan;
-  t_server	*tmp;
+  t_client	*tmp;
 
   if (tablen(cmd) != 2)
     {
-      my_putstr_fd(fd, "nick : error arguments.\n");
+      my_putstr_fd(fd, "/nick : error 2 arguments needed.\n");
       return (0);
     }
   if ((current_chan = get_current_chan(e->chan, fd)) != NULL)
@@ -157,6 +153,6 @@ int		my_nick(t_env *e, char **cmd, int fd)
 	  tmp = tmp->next;
 	}
     }
-  my_putstr_fd(fd, "nick : error join a chan before.\n");
+  my_putstr_fd(fd, "/nick : error join a chan before.\n");
   return (0);
 }

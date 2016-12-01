@@ -1,5 +1,5 @@
 /*
-** lib_client.c for my_irc in /Users/victorbalssa/my_irc
+** get_first_cmd.c for my_irc in /Users/victorbalssa/my_irc
 ** 
 ** Made by BALSSA Victor
 ** Login   <balssa_v@etna-alternance.net>
@@ -8,9 +8,6 @@
 ** Last update Fri Nov 25 22:28:27 2016 BALSSA Victor
 */
 
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<unistd.h>
 #include	"client.h"
 
 int		get_first_cmd()
@@ -19,10 +16,11 @@ int		get_first_cmd()
   char		**tmp;
   char		**tmp2;
   int		i;
+  int		r;
 
-  while (42)
+  r = 1;
+  while (r)
     {
-      write(1, "/> ", 3);
       i = read(0, buff, BUFF_SIZE);
       if (i > 0)
 	{
@@ -35,9 +33,10 @@ int		get_first_cmd()
 		return (i);
 	    }
 	  else
-	    my_putstr("Use the command server for specify a host and a port\n");
+	    my_putstr("Usage: /server [address]:[port]\n");
 	}
       else
-	perror("exit");
+	r = 0;
     }
+  return (0);
 }

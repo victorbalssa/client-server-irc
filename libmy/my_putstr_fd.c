@@ -12,9 +12,12 @@
 
 void	my_putstr_fd(int fd, char *str)
 {
-  while (*str != '\0')
+  int	i;
+
+  i = 0;
+  while (str[i] != '\0')
     {
-      write(fd, &str, 1);
-      str++;
+      write(fd, &str[i], 1);
+      i++;
     }
 }

@@ -26,7 +26,6 @@ SRC = 		my_putchar.c \
 		my_strstr.c \
 		my_getnbr.c \
 		my_strdup.c \
-		my_str_to_wordtab.c \
 		my_bzero.c \
 		tablen.c
 
@@ -38,7 +37,7 @@ all: 		$(NAME)
 
 $(NAME):
 		@echo "-> Creation de la Libmy ..."
-		gcc -c $(FLAGS) $(SRC)
+		gcc -c $(CFLAGS) $(SRC)
 		ar rc $(NAME) $(OBJ)
 		ranlib $(NAME)
 

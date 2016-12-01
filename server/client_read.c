@@ -1,13 +1,19 @@
+/*
+** client_read.c for my_irc in /home/balssa_v/my_my_irc
+**
+** Made by BALSSA Victor
+** Login   <balssa_v@etna-alternance.net>
+**
+** Started on  Wed Oct 21 09:19:12 2015 BALSSA Victor
+** Last update Fri Nov 25 17:49:09 2016 BALSSA Victor
+*/
 
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<unistd.h>
 #include	"serveur.h"
 
 t_chan		*get_current_chan(t_chan *list, int fd)
 {
   t_chan	*tmp;
-  t_server	*user;
+  t_client	*user;
 
   tmp = list;
   while (tmp)
@@ -24,9 +30,9 @@ t_chan		*get_current_chan(t_chan *list, int fd)
   return (NULL);
 }
 
-t_server	*get_current_user(t_server *list, int fd)
+t_client	*get_current_user(t_client *list, int fd)
 {
-  t_server	*tmp;
+  t_client	*tmp;
 
   tmp = list;
   while (tmp)
@@ -38,11 +44,11 @@ t_server	*get_current_user(t_server *list, int fd)
   return (NULL);
 }
 
-void		my_disconnection(t_env *e, int fd)
+void		my_disconnect(t_env *e, int fd)
 {
-  t_server	*tmp;
+  t_client	*tmp;
   t_chan	*current_chan;
-  t_server	*tmp_user;
+  t_client	*tmp_user;
 
   tmp = e->list;
   close(fd);
@@ -69,9 +75,9 @@ void		my_disconnection(t_env *e, int fd)
 
 void		send_msg_in_chan(t_env *e, int fd, char * buf)
 {
-  t_server	*user;
+  t_client	*user;
   t_chan	*current_chan;
-  t_server	*current_user;
+  t_client	*current_user;
 
   current_chan = get_current_chan(e->chan, fd);
   user = (current_chan == NULL) ? NULL : current_chan->user;
@@ -84,15 +90,18 @@ void		send_msg_in_chan(t_env *e, int fd, char * buf)
 	  user->type == FD_CLIENT)
 	{
 	  if (current_user != NULL && current_user->nickname)
-      {
-        my_putstr_fd(user->fd, current_user->nickname);
-        my_putstr_fd(user->fd, buf);
-      } 
-    else if (current_user != NULL)
-      {
-        my_putstr_fd(user->fd, "unknown:");
-        my_putstr_fd(user->fd, buf);
-      }
+	    {
+	      my_putstr_fd(user->fd, current_user->nickname);
+	      my_putstr_fd(user->fd, ": ");
+	      my_putstr_fd(user->fd, buf);
+	      my_putstr_fd(user->fd, "\n");
+	    } 
+	  else if (current_user != NULL)
+	    {
+	      my_putstr_fd(user->fd, "unknown: ");
+	      my_putstr_fd(user->fd, buf);
+	      my_putstr_fd(user->fd, "\n");
+	    }
 	}
       user = user->next;
     }
@@ -108,8 +117,8 @@ void		client_read(t_env *e, int fd)
     {
       buf[r - 1] = '\0';
       if (!get_cmd(e, buf, fd))
-	       send_msg_in_chan(e, fd, buf);
+	send_msg_in_chan(e, fd, buf);
     }
   else
-    my_disconnection(e, fd);
+    my_disconnect(e, fd);
 }

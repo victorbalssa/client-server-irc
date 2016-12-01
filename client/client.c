@@ -28,7 +28,9 @@ int			get_input(int s)
 
   my_bzero(buff, BUFF_SIZE);
   r = read(0, buff, BUFF_SIZE);
-  if (r > 0)
+  if (!my_strcmp(buff, "//exit"))
+    return (0);
+  else if (r > 0)
     {
       buff[r] = '\0';
       write(s, buff, r);
@@ -64,20 +66,22 @@ int			get_msg(int s)
 int			my_client(int s)
 {
   fd_set		fd_read;
+  int			r;
 
-  while (42)
+  r = 1;
+  while (r)
     {
-      write(1, "/> ", 3);
       FD_ZERO(&fd_read);
       FD_SET(0, &fd_read);
       FD_SET(s, &fd_read);
       if (select(s + 1, &fd_read, NULL, NULL, NULL) == -1)
-	perror("select");
+	r = 0;
       if (FD_ISSET(0, &fd_read))
-	get_input(s);
+	r = get_input(s);
       if (FD_ISSET(s, &fd_read))
-	get_msg(s);
+	r = get_msg(s);
     }
+  return (0);
 }
 
 int			my_connect(char **cmd)

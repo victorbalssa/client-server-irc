@@ -13,7 +13,7 @@
 void		change_chan(t_chan *list, char *name_chan, int fd)
 {
   t_chan	*tmp;
-  t_server	*user;
+  t_client	*user;
 
   tmp = list;
   while (tmp)
@@ -32,16 +32,16 @@ void		change_chan(t_chan *list, char *name_chan, int fd)
     }
 }
 
-int		check_user_in_chan(t_server *user, int fd)
+int		check_user_in_chan(t_client *user, int fd)
 {
-  t_server	*tmp;
+  t_client	*tmp;
 
   tmp = user;
   while (tmp)
     {
       if (tmp->fd == fd && tmp->type == FD_CLIENT)
 	{
-	  my_putstr_fd(fd, "join : error you already exist in this chan.\n");
+	  my_putstr_fd(fd, "/join : error you already exist in this chan.\n");
 	  return (1);
 	}
       else if (tmp->fd == fd)
@@ -61,7 +61,7 @@ int		my_join(t_env *e, char **cmd, int fd)
   tmp = e->chan;
   if (tablen(cmd) != 2)
     {
-      my_putstr_fd(fd, "join : error arguments.\n");
+      my_putstr_fd(fd, "/join : error arguments.\n");
       return (0);
     }
   else
@@ -80,6 +80,6 @@ int		my_join(t_env *e, char **cmd, int fd)
 	  }
 	tmp = tmp->next;
       }
-  my_putstr_fd(fd, "join : error chan doesn't exist.\n");
+  my_putstr_fd(fd, "/join : error chan doesn't exist.\n");
   return (0);
 }

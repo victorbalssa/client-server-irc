@@ -13,11 +13,11 @@
 int		my_users(t_env *e, char **cmd, int fd)
 {
   t_chan	*current_chan;
-  t_server	*tmp;
+  t_client	*tmp;
 
   if (tablen(cmd) != 1)
     {
-      my_putstr_fd(fd, "user : error arguments.\n");
+      my_putstr_fd(fd, "/users : error arguments.\n");
       return (0);
     }
   if ((current_chan = get_current_chan(e->chan, fd)) != NULL)
@@ -26,37 +26,36 @@ int		my_users(t_env *e, char **cmd, int fd)
       while (tmp)
 	{
 	  if (tmp->nickname)
-	    my_putstr_fd(fd, tmp->nickname);
+	    {
+	      my_putstr_fd(fd, tmp->nickname);
+	      my_putstr_fd(fd, "\n");
+	    }
 	  else if (!tmp->nickname && tmp->type == FD_CLIENT)
 	    my_putstr_fd(fd, "unknown\n");
 	  tmp = tmp->next;
 	}
     }
   else
-    my_putstr_fd(fd, "user : error join a chan before.\n");
+    my_putstr_fd(fd, "/users : error join a chan before.\n");
   return (0);
 }
 
-void		send_msg_to_user(t_server *c_user, t_server *user, char **msg)
+void		send_msg_to_user(t_client *c_user, t_client *user, char *msg)
 {
   int		i;
-  char		*tmp;
 
   i = 2;
-  tmp = NULL;
-  while (msg[i])
-    tmp = my_strcat(tmp, msg[i++]);
   if (c_user != NULL && c_user->nickname)
     {
       my_putstr_fd(user->fd, c_user->nickname);
       my_putstr_fd(user->fd, " : ");
-      my_putstr_fd(user->fd, tmp);
+      my_putstr_fd(user->fd, msg);
       my_putstr_fd(user->fd, "\n");
     }
   else if (c_user != NULL && !c_user->nickname)
     {
       my_putstr_fd(user->fd, "unknown : "); 
-      my_putstr_fd(user->fd, tmp);
+      my_putstr_fd(user->fd, msg);
       my_putstr_fd(user->fd, "\n");
     }
 }
@@ -64,11 +63,11 @@ void		send_msg_to_user(t_server *c_user, t_server *user, char **msg)
 int		my_whisp(t_env *e, char **cmd, int fd)
 {
   t_chan	*current_chan;
-  t_server	*user;
-  t_server	*current_user;
+  t_client	*user;
+  t_client	*current_user;
 
   if (tablen(cmd) < 3)
-    my_putstr_fd(fd, "msg : error arguments.\n");
+    my_putstr_fd(fd, "/whisp : error arguments.\n");
   else if ((current_chan = get_current_chan(e->chan, fd)) != NULL)
     {
       user = current_chan->user;
@@ -77,14 +76,14 @@ int		my_whisp(t_env *e, char **cmd, int fd)
 	{
 	  if (user->nickname && !my_strcmp(user->nickname, cmd[1]) && fd != user->fd)
 	    {
-	      send_msg_to_user(current_user, user, cmd);
+	      send_msg_to_user(current_user, user, cmd[2]);
 	      return (1);
 	    }
 	  user = user->next;
 	}
-      my_putstr_fd(fd, "msg : error the receiver's nickname doesn't exist.\n");
+      my_putstr_fd(fd, "/whisp : error the receiver's nickname doesn't exist.\n");
     }
   else
-    my_putstr_fd(fd, "msg : error join a chan before.\n");
+    my_putstr_fd(fd, "/whisp : error join a chan before.\n");
   return (0);
 }

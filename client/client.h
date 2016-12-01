@@ -13,6 +13,8 @@
 
 # define	BUFF_SIZE	3000
 
+# include	<unistd.h>
+
 char		**my_str_to_wordtab(char *, char);
 void		my_bzero(char *, int);
 void		free_tab(char **);

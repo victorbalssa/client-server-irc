@@ -58,6 +58,6 @@ fclean:		clean
 		$(RM) $(NAME_CLIENT)
 		$(LIB_FCLEAN)
 
-re:		fclean all
+re:		fclean all clean
 
 .PHONY:		all clean fclean re

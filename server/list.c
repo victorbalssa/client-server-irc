@@ -10,9 +10,9 @@
 
 #include	"serveur.h"
 
-int		check_fd(t_server **list, int fd)
+int		check_fd(t_client **list, int fd)
 {
-  t_server	*tmp;
+  t_client	*tmp;
 
   tmp = *list;
   while (tmp != NULL)
@@ -27,10 +27,10 @@ int		check_fd(t_server **list, int fd)
   return (0);
 }
 
-void		add_elem_fd(t_server **list, int fd, int type, vfptr fptr_read)
+void		add_elem_fd(t_client **list, int fd, int type, vfptr fptr_read)
 {
-  t_server	*new;
-  t_server	*tmp;
+  t_client	*new;
+  t_client	*tmp;
 
   if (check_fd(list, fd))
     return ;
@@ -76,17 +76,16 @@ void		add_elem_chan(t_chan **list, char *name)
 
 }
 
-void		show_list(t_server *list, int fd)
+void		show_list(t_client *list, int fd)
 {
-  t_server	*tmp;
+  t_client	*tmp;
 
   tmp = list;
   while (tmp != NULL)
     {
-      //my_putstr_fd(fd, "fd -> ");
-      //my_putnbr_fd(fd, tmp->fd);
-      //my_putstr_fd(fd, "\n");
-      dprintf(fd, "toto\n");
+      my_putstr_fd(fd, "fd -> ");
+      my_putnbr_fd(fd, tmp->fd);
+      my_putstr_fd(fd, "\n");
       tmp = tmp->next;
     }
 }
@@ -98,9 +97,8 @@ void		show_list_chan(t_chan *list, int fd)
   tmp = list;
   while (tmp != NULL)
     {
-      //my_putstr_fd(fd, tmp->name);
-      //my_putstr_fd(fd, "\n");
-      dprintf(fd, "toto\n");
+      my_putstr_fd(fd, tmp->name);
+      my_putstr_fd(fd, "\n");
       tmp = tmp->next;
     }
 }

@@ -25,19 +25,19 @@
 
 typedef				void(*vfptr)();
 
-typedef struct			s_server
+typedef struct			s_client
 {
   char				*nickname;
   int				fd;
   int				type;
   vfptr				fptr_read;
-  struct s_server		*next;
-}				t_server;
+  struct s_client		*next;
+}				t_client;
 
 typedef struct			s_chan
 {
   char				*name;
-  t_server			*user;
+  t_client			*user;
   int				pos;
   struct s_chan			*next;
 }				t_chan;
@@ -48,7 +48,7 @@ typedef struct			s_env
   fd_set			fd_write;
   fd_set			fd_read;
   int				fd_max;
-  t_server			*list;
+  t_client			*list;
   t_chan			*chan;
 }				t_env;
 
@@ -61,12 +61,12 @@ typedef struct			s_cmd
 }				t_cmd;
 
 void				client_read(t_env *, int);
-int				check_fd(t_server **, int);
-void				add_elem_fd(t_server **, int, int, vfptr);
+int				check_fd(t_client **, int);
+void				add_elem_fd(t_client **, int, int, vfptr);
 void				add_elem_chan(t_chan **, char *);
 void				show_list_chan(t_chan *, int);
 void				show_all_user(t_chan *);
-int				disconnect_part(t_server *, int);
+int				disconnect_chan(t_client *, t_chan *, int);
 int				get_cmd(t_env *, char *, int);
 int				my_list(t_env *, char **, int);
 int				my_join(t_env *, char **, int);
@@ -76,7 +76,7 @@ int				my_nick(t_env *, char **, int);
 int				my_users(t_env *, char **, int);
 int				my_whisp(t_env *, char **, int);
 t_chan				*get_current_chan(t_chan *, int);
-t_server  			*get_current_user(t_server *, int);
+t_client			*get_current_user(t_client *, int);
 char				*my_strcat(char *, char *);
 char				**my_str_to_wordtab(char *, char);
 void				my_putstr(char *);
