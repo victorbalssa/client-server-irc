@@ -5,7 +5,7 @@
 ## Login   <balssa_v@etna-alternance.net>
 ## 
 ## Started on  Fri Oct 23 19:08:32 2015 BALSSA Victor
-## Last update Fri Nov 25 19:52:05 2016 BALSSA Victor
+## Last update Thu Dec  1 21:12:39 2016 BALSSA Victor
 ##
 
 NAME =		libmy.a
@@ -27,7 +27,9 @@ SRC = 		my_putchar.c \
 		my_getnbr.c \
 		my_strdup.c \
 		my_bzero.c \
-		tablen.c
+		tablen.c \
+		my_str_to_wordtab.c \
+		freetab.c
 
 OBJ = 		$(SRC:%.c=%.o)
 
@@ -36,13 +38,15 @@ CFLAGS = 	-Wall -Werror -W -Wextra
 all: 		$(NAME)
 
 $(NAME):
-		@echo "-> Creation de la Libmy ..."
-		gcc -c $(CFLAGS) $(SRC)
-		ar rc $(NAME) $(OBJ)
-		ranlib $(NAME)
+		@echo "-> Compilation libmy.a ..."
+		@gcc -c $(CFLAGS) $(SRC)
+		@ar rc $(NAME) $(OBJ)
+		@ranlib $(NAME)
 
 clean:
-		rm -f $(OBJ)
+		@echo "-> clean libmy ..."
+		@rm -f $(OBJ)
 
 fclean:
-		rm -f $(NAME)
+		@echo "-> fclean libmy ..."
+		@rm -f $(NAME)

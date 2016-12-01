@@ -5,7 +5,7 @@
 ** Login   <balssa_v@etna-alternance.net>
 ** 
 ** Started on  Fri Nov 25 17:30:58 2016 BALSSA Victor
-** Last update Fri Nov 25 17:32:15 2016 BALSSA Victor
+** Last update Thu Dec  1 20:44:02 2016 BALSSA Victor
 */
 
 #include	"serveur.h"
@@ -40,7 +40,8 @@ int		my_users(t_env *e, char **cmd, int fd)
   return (0);
 }
 
-void		send_msg_to_user(t_client *c_user, t_client *user, char *msg)
+void		send_msg_to_user(t_client *c_user, 
+				 t_client *user, char *msg)
 {
   int		i;
 

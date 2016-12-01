@@ -1,11 +1,11 @@
 /*
-** my_getnbr.c for my_getnbr in /home/vico/devc/jour05/balssa_v/my_getnbr
+** my_getnbr.c for my_getnbr in /home/balssa_v/my_getnbr
 ** 
 ** Made by BALSSA Victor
 ** Login   <balssa_v@etna-alternance.net>
 ** 
 ** Started on  Tue Oct 27 19:49:11 2015 BALSSA Victor
-** Last update Tue Oct 27 21:08:21 2015 BALSSA Victor
+** Last update Thu Dec  1 21:17:28 2016 BALSSA Victor
 */
 
 int	my_getnbr(char *str)

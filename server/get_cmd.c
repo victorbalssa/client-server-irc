@@ -5,12 +5,9 @@
 ** Login   <balssa_v@etna-alternance.net>
 ** 
 ** Started on  Fri Nov 25 16:57:45 2016 BALSSA Victor
-** Last update Fri Nov 25 23:37:51 2016 BALSSA Victor
+** Last update Thu Dec  1 20:42:39 2016 BALSSA Victor
 */
 
-#include	<stdio.h>
-#include	<string.h>
-#include	<stdlib.h>
 #include	"serveur.h"
 
 t_cmd		g_tab[] =
@@ -43,7 +40,8 @@ int		get_cmd(t_env *e, char *buff, int fd)
       cmd = my_str_to_wordtab(buff, ' ');
       if (cmd[0] == NULL)
 	return (0);
-      while (g_tab[++i].cmd != NULL && my_strcmp(cmd[0], g_tab[i].cmd));
+      while (g_tab[++i].cmd != NULL 
+	     && my_strcmp(cmd[0], g_tab[i].cmd));
       if (g_tab[i].cmd == NULL)
 	return (0);
       else

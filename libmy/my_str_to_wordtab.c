@@ -1,80 +1,65 @@
 /*
-** my_str_to_wordtab.c for my_str_to_wordtab in /home/vico/devc/jour07/balssa_v/my_str_to_wordtab
+** my_str_to_wordtabe.c for my_str_to_wordtab in /Users/balssa_v/
 ** 
 ** Made by BALSSA Victor
 ** Login   <balssa_v@etna-alternance.net>
 ** 
-** Started on  Mon Oct 26 11:25:37 2015 BALSSA Victor
-** Last update Wed Feb 17 16:13:47 2016 BALSSA Victor
+** Started on  Thu Dec  1 21:27:58 2016 BALSSA Victor
+** Last update Thu Dec  1 21:31:59 2016 BALSSA Victor
 */
 
-#include <unistd.h>
 #include <stdlib.h>
 
-char	*my_strncpy(char *dest, char *src, int n);
+int		my_strlen(char *);
 
-int	nb_word(char *str)
+int		count_word(char *str, char separe)
 {
-  int	i;
-  int	nb;
+  int		i;
+  int		count;
 
   i = 0;
-  nb = 0;
-  while (str[i++] != '\0')
-    if ((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')
-	|| (str[i] >= '0' && str[i] <= '9'))
-      {
-	nb++;
-	while ((str[i] >= 'A' && str[i] <= 'Z')
-	       || (str[i] >= 'a' && str[i] <= 'z')
-	       || (str[i] >= '0' && str[i] <= '9'))
-	  i++;
-      }
-  return (nb);
-}
-
-int	nb_alpha(char *str)
-{
-  int	i;
-  int	nb;
-
-  i = 0;
-  nb = 0;
-  while ((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')
-	 || (str[i] >= '0' && str[i] <= '9'))
+  count = 1;
+  while (str[i] == ' ' || str[i] == '\t' || str[i] == separe)
+    i++;
+  while (str[i])
     {
-      i++;
-      nb++;
-    }
-  return (nb);
-}
-
-char	**my_str_to_wordtab(char *str)
-{
-  int	i;
-  int	n;
-  int	nb_wd;
-  char	**t;
-
-  n = 0;
-  i = 0;
-  nb_wd = nb_word(str);
-  if (!(t = malloc((nb_wd + 1) * sizeof(char *))))
-    return (0);
-  while (nb_wd > 0)
-    {
-      if ((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')
-	  || (str[i] >= '0' && str[i] <= '9'))
+      if (str[i] == ' ' || str[i] == '\t' || str[i] == separe)
 	{
-	  t[n] = malloc(nb_alpha(str + i) * sizeof(char));
-	  t[n] = my_strncpy(t[n], (str + i), nb_alpha(str + i));
-	  i += nb_alpha(str + i);
-	  n++;
-	  nb_wd--;
+	  while (str[i] == ' ' || str[i] == '\t' || str[i] == separe)
+	    i++;
+	  if (str[i])
+	    count++;
 	}
-      else
+      if (str[i])
 	i++;
     }
-  t[n] = NULL;
-  return (t);
+  return (count);
+}
+
+char		**my_str_to_wordtab(char *str, char separe)
+{
+  char		**tab;
+  int		i;
+  int		j;
+  int		k;
+
+  i = 0;
+  j = 0;
+  if ((tab = malloc(sizeof(*tab) * ((count_word(str, separe) + 1)))) == NULL)
+    return (0);
+  while (str[i] == '\t' || str[i] == ' ' || str[i] == separe)
+    i++;
+  while (str[i])
+    {
+      if ((tab[j] = malloc(sizeof(**tab) * (my_strlen(str) + 1))) == NULL)
+	return (0);
+      k = 0;
+      while (str[i] != ' ' && str[i] != '\t' && str[i] != separe && str[i])
+        tab[j][k++] = str[i++];
+      tab[j++][k] = '\0';
+      while (str[i] == ' ' || str[i] == '\t' || str[i] == separe)
+	i++;
+    }
+  tab[j] = NULL;
+  return (tab);
 }

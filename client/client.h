@@ -5,7 +5,7 @@
 ** Login   <balssa_v@etna-alternance.net>
 ** 
 ** Started on  Wed Nov 23 14:27:13 2016 BALSSA Victor
-** Last update Fri Nov 25 23:31:18 2016 BALSSA Victor
+** Last update Thu Dec  1 21:49:49 2016 BALSSA Victor
 */
 
 #ifndef		__CLIENT_H__
@@ -14,14 +14,17 @@
 # define	BUFF_SIZE	3000
 
 # include	<unistd.h>
+# include	<sys/socket.h>
+# include	<netdb.h>
+# include	<arpa/inet.h>
+
+int		my_connect(char **);
+int		get_first_cmd();
 
 char		**my_str_to_wordtab(char *, char);
 void		my_bzero(char *, int);
 void		free_tab(char **);
 int		tablen(char **);
-int		my_connect(char **);
-
-int		get_first_cmd();
 int		my_getnbr(char *);
 int		my_strcmp(char *, char *);
 void		my_putstr(char *);

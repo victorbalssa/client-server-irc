@@ -5,13 +5,13 @@
 ** Login   <balssa_v@etna-alternance.net>
 ** 
 ** Started on  Fri Nov 25 17:32:51 2016 BALSSA Victor
-** Last update Fri Nov 25 19:54:15 2016 BALSSA Victor
+** Last update Thu Dec  1 22:50:12 2016 BALSSA Victor
 */
 
-#include	<sys/types.h>
-#include	<netinet/in.h>
+//#include	<sys/types.h>
+//#include	<netinet/in.h>
 #include	<arpa/inet.h>
-#include	<sys/time.h>
+//#include	<sys/time.h>
 #include	"serveur.h"
 
 void			server_read(t_env *e, int s)
@@ -20,7 +20,8 @@ void			server_read(t_env *e, int s)
   struct sockaddr_in	client_sin;
   socklen_t		*client_sin_len;
 
-  cs = accept(s, (struct sockaddr *)&client_sin, (socklen_t *)&client_sin_len);
+  cs = accept(s, (struct sockaddr *)&client_sin, 
+	      (socklen_t *)&client_sin_len);
   if (cs == -1)
     return ;
   my_putstr("New client connected\n");
@@ -30,7 +31,7 @@ void			server_read(t_env *e, int s)
   my_putstr_fd(cs, "to start discussing !!\n");
 }
 
-void			add_server(t_env *e)
+void			add_client(t_env *e)
 {
   int			s;
   struct sockaddr_in	sin;
@@ -50,9 +51,10 @@ void			add_server(t_env *e)
   add_elem_fd(&e->list, s, FD_SERVER, server_read);
   if ((name = malloc(sizeof(char) * 2)) == NULL)
     return ;
-  while (pos <= 10)
+  while (pos <= 9)
     {
-      sprintf(name, "%d", pos);
+      name[0] = pos + '0';
+      name[1] = '\0';
       add_elem_chan(&e->chan, my_strdup(name));
       pos++;
     }
@@ -76,7 +78,8 @@ int			my_server(t_env *e)
 	}
       tmp = tmp->next;
     }
-  if (select(e->fd_max + 1, &e->fd_read, &e->fd_write, NULL, NULL) == -1)
+  if (select(e->fd_max + 1, 
+	     &e->fd_read, &e->fd_write, NULL, NULL) == -1)
     return (0);
   tmp = e->list;
   while (tmp != NULL)
@@ -94,13 +97,13 @@ int			main(int argc, char **argv)
 
   if (argc != 2 || my_getnbr(argv[1]) < 1025)
     {
-      my_putstr("Usage : ./server_bin port\n\n");
+      my_putstr("Usage: ./server_bin [port > 1025]\n\n");
       return (0);
     }
   e.port = my_getnbr(argv[1]);
   e.list = NULL;
   e.chan = NULL;
-  add_server(&e);
+  add_client(&e);
   while (my_server(&e));
   return (0);
 }

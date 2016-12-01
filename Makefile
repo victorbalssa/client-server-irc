@@ -5,7 +5,7 @@
 ## Login   <balssa_v@etna-alternance.net>
 ## 
 ## Started on  Wed Nov 23 14:25:10 2016 BALSSA Victor
-## Last update Wed Nov 23 15:21:27 2016 BALSSA Victor
+## Last update Thu Dec  1 21:20:06 2016 BALSSA Victor
 ##
 
 CC =		gcc
@@ -39,24 +39,26 @@ server:		$(NAME_SERVER)
 client:		$(NAME_CLIENT)
 
 $(NAME_SERVER):	$(OBJS_SERVER)
-		$(LIB)
+		@$(LIB)
 		@echo "-> Compilation server_bin ..."
 		$(CC) $(OBJS_SERVER) -L libmy/ -lmy $(CFLAGS) -o $(NAME_SERVER) $(LDFLAGS)
 
 $(NAME_CLIENT):	$(OBJS_CLIENT)
-		$(LIB)
+		@$(LIB)
 		@echo "-> Compilation client_bin ..."
 		$(CC) $(OBJS_CLIENT) -L libmy/ -lmy $(CFLAGS) -o $(NAME_CLIENT) $(LDFLAGS)
 
-clean:
-		$(RM) $(OBJS_SERVER)
-		$(RM) $(OBJS_CLIENT)
-		$(LIB_CLEAN)
+clean:		
+		@echo "-> clean client / server ..."
+		@$(RM) $(OBJS_SERVER)
+		@$(RM) $(OBJS_CLIENT)
+		@$(LIB_CLEAN)
 
 fclean:		clean
-		$(RM) $(NAME_SERVER)
-		$(RM) $(NAME_CLIENT)
-		$(LIB_FCLEAN)
+		@echo "-> fclean client / server ..."
+		@$(RM) $(NAME_SERVER)
+		@$(RM) $(NAME_CLIENT)
+		@$(LIB_FCLEAN)
 
 re:		fclean all clean
 

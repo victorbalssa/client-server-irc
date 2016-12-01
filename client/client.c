@@ -5,20 +5,9 @@
 ** Login   <balssa_v@etna-alternance.net>
 ** 
 ** Started on  Wed Nov 23 14:28:50 2016 BALSSA Victor
-** Last update Fri Nov 25 23:18:31 2016 BALSSA Victor
+** Last update Thu Dec  1 22:26:51 2016 BALSSA Victor
 */
 
-#include		<sys/types.h>
-#include		<sys/socket.h>
-#include		<unistd.h>
-#include		<stdlib.h>
-#include		<stdio.h>
-#include		<netdb.h>
-#include		<string.h>
-#include		<netinet/in.h>
-#include		<arpa/inet.h>
-#include		<fcntl.h>
-#include		<sys/stat.h>
 #include		"client.h"
 
 int			get_input(int s)
@@ -28,9 +17,7 @@ int			get_input(int s)
 
   my_bzero(buff, BUFF_SIZE);
   r = read(0, buff, BUFF_SIZE);
-  if (!my_strcmp(buff, "//exit"))
-    return (0);
-  else if (r > 0)
+  if (r > 0)
     {
       buff[r] = '\0';
       write(s, buff, r);
@@ -95,16 +82,16 @@ int			my_connect(char **cmd)
     port = my_getnbr(cmd[1]);
   pe = getprotobyname("TCP");
   if (pe == NULL)
-    perror("Getprotobyname() fail");
+    return (-1);
   s = socket(AF_INET, SOCK_STREAM, pe->p_proto);
   if (s == -1)
-    perror("Socket() fail.");
+    return (-1);
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
   sin.sin_addr.s_addr = inet_addr(cmd[0]);
   if (connect(s, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
     {
-      perror("Error");
+      my_putstr("Error connect()\n");
       return (-1);
     }
   free_tab(cmd);
