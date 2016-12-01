@@ -1,2 +1,2 @@
 # my_irc
-Internet really chat server and client
+Internet really chat server and client in c
