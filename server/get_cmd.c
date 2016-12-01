@@ -65,6 +65,8 @@ int		my_exit(t_env *e, char **cmd, int fd)
 	  tmp = tmp->next;
 	}
     }
+  my_putstr_fd(fd, "disconnected.\n");
+  my_disconnect(e, fd);
   return (0);
 }
 

@@ -67,6 +67,7 @@ void				add_elem_chan(t_chan **, char *);
 void				show_list_chan(t_chan *, int);
 void				show_all_user(t_chan *);
 int				disconnect_chan(t_client *, t_chan *, int);
+void				my_disconnect(t_env *, int);
 int				get_cmd(t_env *, char *, int);
 int				my_list(t_env *, char **, int);
 int				my_join(t_env *, char **, int);
