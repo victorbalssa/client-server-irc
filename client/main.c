@@ -64,7 +64,7 @@ int		my_client(int s)
       if (select(s + 1, &fd_read, NULL, NULL, NULL) == -1)
 	r = 0;
       if (FD_ISSET(0, &fd_read))
-	r = get_input(s);
+	r = send_input(s);
       if (FD_ISSET(s, &fd_read))
 	r = get_msg(s);
     }
