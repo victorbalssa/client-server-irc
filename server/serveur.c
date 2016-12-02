@@ -8,11 +8,7 @@
 ** Last update Thu Dec  1 22:50:12 2016 BALSSA Victor
 */
 
-//#include	<sys/types.h>
-//#include	<netinet/in.h>
-#include	<arpa/inet.h>
-//#include	<sys/time.h>
-#include	"serveur.h"
+#include		"serveur.h"
 
 void			server_read(t_env *e, int s)
 {

@@ -8,20 +8,21 @@
 ** Last update Thu Dec  1 22:46:44 2016 BALSSA Victor
 */
 
-#ifndef		__SERVEUR_H__
-# define	__SERVEUR_H__
+#ifndef				__SERVEUR_H__
+# define			__SERVEUR_H__
 
-# define	FD_FREE		0
-# define	FD_CLIENT	1
-# define	FD_SERVER	2
-# define	MAX_FD		255
-# define	BUFF_SIZE	3000
+# define			FD_FREE		0
+# define			FD_CLIENT	1
+# define			FD_SERVER	2
+# define			MAX_FD		255
+# define			BUFF_SIZE	3000
 
-#include <sys/socket.h>
-#include <sys/select.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+# include			<arpa/inet.h>
+# include			<sys/socket.h>
+# include			<sys/select.h>
+# include			<stdio.h>
+# include			<unistd.h>
+# include			<stdlib.h>
 
 typedef				void(*vfptr)();
 

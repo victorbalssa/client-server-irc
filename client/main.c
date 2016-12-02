@@ -1,5 +1,5 @@
 /*
-** client.c for my_irc in /Users/victorbalssa/my_irc
+** main.c for my_irc in /Users/victorbalssa/my_irc/client
 ** 
 ** Made by BALSSA Victor
 ** Login   <balssa_v@etna-alternance.net>
@@ -8,12 +8,12 @@
 ** Last update Thu Dec  1 22:26:51 2016 BALSSA Victor
 */
 
-#include		"client.h"
+#include	"client.h"
 
-int			get_input(int s)
+int		send_input(int s)
 {
-  char			buff[BUFF_SIZE];
-  int			r;
+  char		buff[BUFF_SIZE];
+  int		r;
 
   my_bzero(buff, BUFF_SIZE);
   r = read(0, buff, BUFF_SIZE);
@@ -30,10 +30,10 @@ int			get_input(int s)
     }
 }
 
-int			get_msg(int s)
+int		get_msg(int s)
 {
-  char			buff[BUFF_SIZE];
-  int			r;
+  char		buff[BUFF_SIZE];
+  int		r;
 
   my_bzero(buff, BUFF_SIZE);
   r = recv(s, buff, BUFF_SIZE, 0);
@@ -50,10 +50,10 @@ int			get_msg(int s)
     }
 }
 
-int			my_client(int s)
+int		my_client(int s)
 {
-  fd_set		fd_read;
-  int			r;
+  fd_set	fd_read;
+  int		r;
 
   r = 1;
   while (r)
@@ -71,36 +71,9 @@ int			my_client(int s)
   return (0);
 }
 
-int			my_connect(char **cmd)
+int		main()
 {
-  struct protoent	*pe;
-  struct sockaddr_in	sin;
-  int			s;
-  int			port;
-
-  if (cmd[1] != NULL)
-    port = my_getnbr(cmd[1]);
-  pe = getprotobyname("TCP");
-  if (pe == NULL)
-    return (-1);
-  s = socket(AF_INET, SOCK_STREAM, pe->p_proto);
-  if (s == -1)
-    return (-1);
-  sin.sin_family = AF_INET;
-  sin.sin_port = htons(port);
-  sin.sin_addr.s_addr = inet_addr(cmd[0]);
-  if (connect(s, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
-    {
-      my_putstr("Error connect()\n");
-      return (-1);
-    }
-  free_tab(cmd);
-  return (s);
-}
-
-int			main()
-{
-  int			s;
+  int		s;
 
   s = get_first_cmd();
   if (my_client(s) == 0)

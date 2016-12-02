@@ -8,15 +8,42 @@
 ** Last update Thu Dec  1 21:38:17 2016 BALSSA Victor
 */
 
-#include	"client.h"
+#include		"client.h"
 
-int		get_first_cmd()
+int			my_connect(char **cmd)
 {
-  char		buff[BUFF_SIZE];
-  char		**tmp;
-  char		**tmp2;
-  int		i;
-  int		r;
+  struct protoent	*pe;
+  struct sockaddr_in	sin;
+  int			s;
+  int			port;
+
+  if (cmd[1] != NULL)
+    port = my_getnbr(cmd[1]);
+  pe = getprotobyname("TCP");
+  if (pe == NULL)
+    return (-1);
+  s = socket(AF_INET, SOCK_STREAM, pe->p_proto);
+  if (s == -1)
+    return (-1);
+  sin.sin_family = AF_INET;
+  sin.sin_port = htons(port);
+  sin.sin_addr.s_addr = inet_addr(cmd[0]);
+  if (connect(s, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
+    {
+      my_putstr("Error connect()\n");
+      return (-1);
+    }
+  free_tab(cmd);
+  return (s);
+}
+
+int			get_first_cmd()
+{
+  char			buff[BUFF_SIZE];
+  char			**tmp;
+  char			**tmp2;
+  int			i;
+  int			r;
 
   r = 1;
   while (r)
