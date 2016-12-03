@@ -43,9 +43,6 @@ int		my_users(t_env *e, char **cmd, int fd)
 void		send_msg_to_user(t_client *c_user, 
 				 t_client *user, char *msg)
 {
-  int		i;
-
-  i = 2;
   if (c_user != NULL && c_user->nickname)
     {
       my_putstr_fd(user->fd, c_user->nickname);

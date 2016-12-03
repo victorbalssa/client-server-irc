@@ -75,7 +75,8 @@ int		main()
 {
   int		s;
 
-  s = get_first_cmd();
-  if (my_client(s) == 0)
+  if (!(s = get_first_cmd()))
     return (0);
+  while (my_client(s));
+  return (0);
 }
